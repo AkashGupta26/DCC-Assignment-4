@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ES113 Assignment 4</title>
+  <style>
+    /* Basic styling */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #000; /* Black background color */
+      color: #ff4444; /* Red text color */
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      width: 80%;
+      margin: 40px auto;
+    }
+    .container h1 {
+      font-size: 24px; /* Adjust font size as needed */
+    }
+    .container h2 {
+      font-size: 24px; /* Adjust font size as needed */
+    }
+    .container h3 {
+      font-size: 24px; /* Adjust font size as needed */
+    }
+    .container h4 {
+      font-size: 24px; /* Adjust font size as needed */
+    }
+    .dropdown {
+      margin-left: 50px;
+      margin-bottom: 20px; /* Add margin between the dropdown and search box */
+    }
+    .search-box1{
+      position: relative;
+      width: 50%;
+      max-width: 500px;
+      margin-left: 50px;
+      opacity: 0.5; /* Make search box and button translucent initially */
+    }
+    .search-box2{
+      position: relative;
+      width: 50%;
+      max-width: 500px;
+      margin-left: 50px;
+      opacity: 1; /* Make search box and button opaque initially */
+    }
+    .search-input1 {
+      width: calc(100% - 90px); /* Adjusting for the button width and some spacing */
+      padding: 10px;
+      border: 1px solid #ff4444; /* Red border */
+      border-radius: 5px;
+      font-size: 16px;
+      outline: none;
+      color: #ff4444; /* Red text color */
+      background-color: #000; /* Black background color */
+      pointer-events: none; /* Make search input inactive */
+    }
+    .search-input2 {
+      width: calc(100% - 90px); /* Adjusting for the button width and some spacing */
+      padding: 10px;
+      border: 1px solid #ff4444; /* Red border */
+      border-radius: 5px;
+      font-size: 16px;
+      outline: none;
+      color: #ff4444; /* Red text color */
+      background-color: #000; /* Black background color */
+    }
+    .search-btn1 {
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      background-color: #ff4444; /* Red background color */
+      color: #000; /* Black text color */
+      cursor: not-allowed; /* Make button inactive */
+      pointer-events: none; /* Disable button clicks */
+      opacity: 0.5; /* Make button translucent initially */
+    }
+    .search-btn1:hover {
+      background-color: #cc0000; /* Darker red on hover */
+    }
+    .search-btn2 {
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      background-color: #ff4444; /* Red background color */
+      color: #000; /* Black text color */
+    }
+    .search-btn2:hover {
+      background-color: #cc0000; /* Darker red on hover */
+    }
+    .dropdown select {
+      width: 40%;
+      padding: 10px;
+      border: 1px solid #ff4444; /* Red border */
+      border-radius: 5px;
+      font-size: 16px;
+      outline: none;
+      color: #ff4444; /* Red text color */
+      background-color: #000; /* Black background color */
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Q1 - Search by Column Heading</h1>
+    <div class="dropdown">
+      <select class="search-option">
+        <option disabled selected>Select using dropdown</option> <!-- Add disabled and selected attributes -->
+        <option value="bond_number">Bond Number</option>
+        <option value="company">Company</option>
+        <option value="date">Date</option>
+        <option value="political_party">Political Party</option>
+      </select>
+    </div>
+    <div class="search-box1">
+      <input type="text" class="search-input1" placeholder="Enter your search term">
+      <button class="search-btn1">Find</button>
+    </div>
+
+    <h2>Q2 - Search by Indiviual/Company</h2>
+    <div class="search-box2">
+      <input type="text" class="search-input2" placeholder="Enter Individual/Company Name">
+      <button class="search-btn2">Find</button>
+    </div>
+
+    <h3>Q3 - Search by Political Party</h3>
+    <div class="search-box2">
+      <input type="text" class="search-input2" placeholder="Enter Political Party">
+      <button class="search-btn2">Find</button>
+    </div>
+
+    <h4>Q4 - Search by Political Party</h4>
+    <div class="search-box2">
+      <input type="text" class="search-input2" placeholder="Enter Political Party">
+      <button class="search-btn2">Find</button>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+    const searchButtons = document.querySelectorAll('.search-btn1');
+    const searchInputs = document.querySelectorAll('.search-input1');
+    const dropdowns = document.querySelectorAll('.search-option');
+
+    searchButtons.forEach((button, index) => {
+      button.addEventListener('click', function() {
+        const query = searchInputs[index].value;
+        const column = dropdowns[index].value;
+
+        // Make AJAX request to the backend
+        fetch(`/search?query=${query}&column=${column}`)
+          .then(response => response.json())
+          .then(data => {
+            // Handle the response from the backend
+            console.log(data); // You can update the UI with the search results here
+          })
+          .catch(error => console.error('Error:', error));
+      });
+    });
+  });
+
+    // JavaScript code to update the search box opacity based on whether a dropdown option is selected or not
+    const dropdowns = document.querySelectorAll('.search-option');
+    const searchInputs = document.querySelectorAll('.search-input1');
+    const searchBoxes = document.querySelectorAll('.search-box1');
+    const searchButtons = document.querySelectorAll('.search-btn1');
+
+    dropdowns.forEach((dropdown, index) => {
+      dropdown.addEventListener('change', function() {
+        if (this.value !== '') {
+          searchInputs[index].placeholder = 'Enter ' + this.options[this.selectedIndex].text;
+          searchInputs[index].style.opacity = '1'; // Make search input fully visible
+          searchInputs[index].style.pointerEvents = 'auto'; // Make search input active
+          searchBoxes[index].style.opacity = '1'; // Make search box fully visible
+          searchButtons[index].style.opacity = '1'; // Make search button fully visible
+          searchButtons[index].style.cursor = 'pointer'; // Make search button clickable
+          searchButtons[index].style.pointerEvents = 'auto'; // Enable button clicks
+        } else {
+          searchInputs[index].placeholder = 'Enter your search term';
+          searchInputs[index].style.opacity = '0.5'; // Make search input translucent
+          searchInputs[index].style.pointerEvents = 'none'; // Make search input inactive
+          searchButtons[index].style.opacity = '0.5'; // Make search button translucent
+          searchButtons[index].style.cursor = 'not-allowed'; // Make search button inactive
+          searchButtons[index].style.pointerEvents = 'none'; // Disable button clicks
+        }
+      });
+
+      // Initially disable search button
+      searchButtons[index].disabled = true;
+
+      // Enable search button once dropdown option is changed
+      dropdown.addEventListener('change', function() {
+        searchButtons[index].disabled = false;
+      });
+    });
+  </script>
+</body>
+</html>
+
